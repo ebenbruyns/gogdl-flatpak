@@ -1,0 +1,31 @@
+app-id: com.github.heroic_games_launcher.heroic-gogdl
+version: 0.20.34
+runtime: org.gnome.Platform
+runtime-version: "45"
+sdk: org.gnome.Sdk
+command: gogdl
+finish-args: # flatpak permissions
+  - --device=all # needed for OpenGL, gamepads and serial/parallel
+  - --share=ipc # needed for X11
+  - --share=network # Needed for IPX and serial over TCP/IP
+  - --socket=x11 # default to X11, as Gnome does not provide SSD
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --filesystem=home
+  - --filesystem=/run/media
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-desktop
+modules:
+  - "python3-requests.json"
+  - name: gogdl
+    buildsystem: simple
+    build-commands:
+      - "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} . --no-build-isolation"
+    sources:
+      - type: git
+        url: https://github.com/Heroic-Games-Launcher/heroic-gogdl
+        commit: 2b7555eb55d5fdc214712e7c7e004703e7694b07
+    
+  
